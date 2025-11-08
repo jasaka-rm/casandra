@@ -59,9 +59,9 @@ result = score_reit(
 print(result)
 ```
 
-```bash
-Example output
 
+Example output
+```bash
 {
   'climate_score': 58.4,
   'carbon_score': 35.0,
@@ -100,6 +100,7 @@ Works entirely with Python — no extra setup needed
 
 
 ## 🧮 Project Structure
+```bash
 reitvision_esg/
 │
 ├── config.py                # Settings (weights, timeouts, user-agent)
@@ -111,6 +112,7 @@ reitvision_esg/
 ├── governance_sentiment.py  # NLP sentiment for governance risk
 ├── scoring.py               # Combine 3 metrics into ESG score
 └── demo_pipeline.py         # Orchestration pipeline
+```
 
 
 ## Future Work
