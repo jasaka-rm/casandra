@@ -2,6 +2,7 @@
 
 **REITVision ESG** is a Python-based analytics tool that combines financial, climate, and governance data to evaluate the **ESG-adjusted risk** of Real Estate Investment Trusts (REITs).  
 It scrapes public filings, estimates climate and carbon exposure, analyzes governance sentiment, and generates predictive ESG distress scores across **1-, 5-, and 10-year** horizons.
+It includes both a data pipeline and a Streamlit web app (app.py) for visualizing results and running analyses through an intuitive interface.
 
 ---
 
@@ -38,3 +39,68 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 
 # 3. Install dependencies
 pip install -r requirements.txt
+
+
+## 🧩 Usage Example
+from reitvision_esg.demo_pipeline import score_reit
+
+result = score_reit(
+    cik="0000790703",           # Example: Simon Property Group
+    name="Simon Property Group",
+    ticker="SPG",
+    carbon_csv="reitvision_esg/carbon_inputs.csv",
+    max_props=10
+)
+
+print(result)
+
+
+Example output
+
+{
+  'climate_score': 58.4,
+  'carbon_score': 35.0,
+  'gov_score_1y': 52.3,
+  'final_esg_1y': 48.9,
+  'final_esg_5y': 47.4,
+  'final_esg_10y': 46.7,
+  'n_properties_used': 8
+}
+
+## 🎛️ Interactive Dashboard (Streamlit)
+We’ve built a simple Streamlit app (app.py) to visualize and interact with the REITVision ESG model.
+It lets you enter a REIT name, ticker, and CIK number, then runs the full ESG-scoring pipeline and displays results instantly in a web dashboard.
+
+🧭 How to launch it
+Make sure your virtual environment is activated and dependencies are installed:
+pip install -r requirements.txt
+
+Run the app:
+streamlit run app.py
+
+Open your browser at: 
+http://localhost:8501
+
+🧩 Features
+Input REIT CIK, name, ticker, and optional CSV path
+See ESG metrics for 1-, 5-, and 10-year horizons
+JSON summary + individual metrics displayed in real time
+Works entirely with Python — no extra setup needed
+
+
+
+## 🧮 Project Structure
+reitvision_esg/
+│
+├── config.py                # Settings (weights, timeouts, user-agent)
+├── edgar_scraper.py         # Scrape SEC filings
+├── property_parser.py       # Extract property addresses from 10-K
+├── geocode.py               # Geocode addresses via OpenStreetMap
+├── climate_risk.py          # Compute flood/heat risk (0–100)
+├── carbon_intensity.py      # Compute carbon intensity score
+├── governance_sentiment.py  # NLP sentiment for governance risk
+├── scoring.py               # Combine 3 metrics into ESG score
+└── demo_pipeline.py         # Orchestration pipeline
+
+
+## Future Work
