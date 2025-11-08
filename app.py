@@ -7,14 +7,8 @@ from pathlib import Path
 import streamlit as st
 import pandas as pd
 
-# Try to import your package. Your folder has been called "casandra" in your paths.
-# If you renamed it to "reitvision_esg", the fallback will work.
-try:
-    from casandra.demo_pipeline import score_reit
-    from casandra.config import WEIGHTS as DEFAULT_WEIGHTS, SEC_USER_AGENT
-except Exception:
-    from reitvision_esg.demo_pipeline import score_reit
-    from reitvision_esg.config import WEIGHTS as DEFAULT_WEIGHTS, SEC_USER_AGENT
+from casandra.demo_pipeline import score_reit
+from casandra.config import WEIGHTS as DEFAULT_WEIGHTS, SEC_USER_AGENT
 
 st.set_page_config(page_title="CASANDRA", page_icon="🏙️", layout="wide")
 
