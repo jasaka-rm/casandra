@@ -101,17 +101,28 @@ Works entirely with Python — no extra setup needed
 
 ## 🧮 Project Structure
 ```bash
-reitvision_esg/
+casandra/
 │
-├── config.py                # Settings (weights, timeouts, user-agent)
-├── edgar_scraper.py         # Scrape SEC filings
-├── property_parser.py       # Extract property addresses from 10-K
-├── geocode.py               # Geocode addresses via OpenStreetMap
-├── climate_risk.py          # Compute flood/heat risk (0–100)
-├── carbon_intensity.py      # Compute carbon intensity score
-├── governance_sentiment.py  # NLP sentiment for governance risk
-├── scoring.py               # Combine 3 metrics into ESG score
-└── demo_pipeline.py         # Orchestration pipeline
+├── __init__.py
+├── carbon_intensity.py       # Compute carbon intensity score (kg CO₂e / sqm)
+├── climate_risk.py           # Compute flood and heat risk (0–100 scale)
+├── config.py                 # Global settings: weights, timeouts, user-agent
+├── demo_pipeline.py          # Main orchestration pipeline for ESG scoring
+├── edgar_scraper.py          # Scrape SEC EDGAR filings (10-K Item 2)
+├── geocode.py                # Convert property addresses to lat/lon
+├── governance_sentiment.py   # Analyze governance sentiment via NLP (VADER)
+├── property_parser.py        # Extract property addresses from 10-K HTML
+├── scoring.py                # Combine all factors into ESG-adjusted score
+└── app.py                    # Streamlit dashboard for interactive visualization
+
+# Root-level files
+carbon_inputs.csv             # Sample REIT carbon data
+uploaded_carbon_inputs.csv    # Optional user-uploaded version
+run_demo.py                   # Script to run the ESG scoring pipeline manually
+requirements.txt              # Python dependencies
+README.md                     # Project documentation
+.venv/                        # Virtual environment (ignored in Git)
+.vscode/                      # Editor configuration
 ```
 
 
