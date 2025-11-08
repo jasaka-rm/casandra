@@ -1,7 +1,9 @@
 # 🏙️ Casandra — Real Estate ESG Risk Intelligence
 
 **Casandra** is a Python-based analytics tool that combines financial, climate, and governance data to evaluate the **ESG-adjusted risk** of Real Estate Investment Trusts (REITs).  
+
 It scrapes public filings, estimates climate and carbon exposure, analyzes governance sentiment, and generates predictive ESG distress scores across **1-, 5-, and 10-year** horizons.
+
 It includes both a data pipeline and a Streamlit web app (app.py) for visualizing results and running analyses through an intuitive interface.
 
 ---
