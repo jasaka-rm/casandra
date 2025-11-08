@@ -39,9 +39,13 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 
 # 3. Install dependencies
 pip install -r requirements.txt
+```
+
+---
 
 
 ## 🧩 Usage Example
+```bash
 from reitvision_esg.demo_pipeline import score_reit
 
 result = score_reit(
@@ -53,8 +57,9 @@ result = score_reit(
 )
 
 print(result)
+```
 
-
+```bash
 Example output
 
 {
@@ -66,6 +71,7 @@ Example output
   'final_esg_10y': 46.7,
   'n_properties_used': 8
 }
+```
 
 ## 🎛️ Interactive Dashboard (Streamlit)
 We’ve built a simple Streamlit app (app.py) to visualize and interact with the REITVision ESG model.
@@ -73,10 +79,14 @@ It lets you enter a REIT name, ticker, and CIK number, then runs the full ESG-sc
 
 🧭 How to launch it
 Make sure your virtual environment is activated and dependencies are installed:
+```bash
 pip install -r requirements.txt
+```
 
 Run the app:
+```bash
 streamlit run app.py
+```
 
 Open your browser at: 
 http://localhost:8501
