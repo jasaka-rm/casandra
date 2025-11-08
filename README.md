@@ -1,6 +1,6 @@
-# 🏙️ REITVision ESG — Real Estate ESG Risk Intelligence
+# 🏙️ Casandra — Real Estate ESG Risk Intelligence
 
-**REITVision ESG** is a Python-based analytics tool that combines financial, climate, and governance data to evaluate the **ESG-adjusted risk** of Real Estate Investment Trusts (REITs).  
+**Casandra** is a Python-based analytics tool that combines financial, climate, and governance data to evaluate the **ESG-adjusted risk** of Real Estate Investment Trusts (REITs).  
 It scrapes public filings, estimates climate and carbon exposure, analyzes governance sentiment, and generates predictive ESG distress scores across **1-, 5-, and 10-year** horizons.
 It includes both a data pipeline and a Streamlit web app (app.py) for visualizing results and running analyses through an intuitive interface.
 
@@ -10,7 +10,7 @@ It includes both a data pipeline and a Streamlit web app (app.py) for visualizin
 
 ### Why
 Traditional REIT analysis misses emerging ESG risks — such as carbon penalties, flood exposure, or governance controversies — that can destroy portfolio value.  
-**REITVision ESG** integrates these signals into one unified score to help investors:
+**Casandra** integrates these signals into one unified score to help investors:
 - Detect early sustainability and financial risks  
 - Avoid stranded or “brown” assets  
 - Identify climate-resilient, well-governed REITs
@@ -74,7 +74,7 @@ Example output
 ```
 
 ## 🎛️ Interactive Dashboard (Streamlit)
-We’ve built a simple Streamlit app (app.py) to visualize and interact with the REITVision ESG model.
+We’ve built a simple Streamlit app (app.py) to visualize and interact with the Casandra model.
 It lets you enter a REIT name, ticker, and CIK number, then runs the full ESG-scoring pipeline and displays results instantly in a web dashboard.
 
 🧭 How to launch it
