@@ -12,19 +12,45 @@ MVP: read a CSV you curate with columns:
 """
 
 import math, pandas as pd
-from typing import Optional
+from typing import Optional, Union
 
-def carbon_intensity_from_csv(csv_path: str, ticker: str) -> Optional[float]:
-    df = pd.read_csv(csv_path)
-    row = df[df["ticker"].str.upper() == ticker.upper()].head(1)
+# def carbon_intensity_from_csv(csv_path: str, ticker: str) -> Optional[float]:
+#     df = pd.read_csv(csv_path)
+#     row = df[df["ticker"].str.upper() == ticker.upper()].head(1)
+#     if row.empty:
+#         return None
+#     t = float(row.iloc[0]["scope12_tonnes_co2e"])
+#     a = float(row.iloc[0]["gross_leasable_area_sqm"])
+#     if a <= 0:
+#         return None
+#     kg_per_sqm = (t * 1000) / a
+#     return kg_per_sqm
+
+def _load_carbon_df(carbon: Union[str, "pd.DataFrame"]) -> pd.DataFrame:
+    if isinstance(carbon, pd.DataFrame):
+        df = carbon.copy()
+    else:
+        df = pd.read_csv(carbon)
+    # normalize column names
+    df.columns = [c.strip().lower() for c in df.columns]
+    required = {"ticker", "scope12_tonnes_co2e", "gross_leasable_area_sqm"}
+    missing = required.difference(set(df.columns))
+    if missing:
+        raise ValueError(f"carbon_inputs is missing columns: {sorted(missing)}")
+    return df
+
+def carbon_intensity_kg_per_sqm(carbon: Union[str, "pd.DataFrame"], ticker: str) -> Optional[float]:
+    df = _load_carbon_df(carbon)
+    # robust ticker match
+    row = df[df["ticker"].astype(str).str.upper() == ticker.upper()].head(1)
     if row.empty:
         return None
-    t = float(row.iloc[0]["scope12_tonnes_co2e"])
-    a = float(row.iloc[0]["gross_leasable_area_sqm"])
-    if a <= 0:
+    t = row["scope12_tonnes_co2e"].iloc[0]
+    gla = row["gross_leasable_area_sqm"].iloc[0]
+    if pd.isna(t) or pd.isna(gla) or gla == 0:
         return None
-    kg_per_sqm = (t * 1000) / a
-    return kg_per_sqm
+    kg = float(t) * 1000.0
+    return kg / float(gla)
 
 def carbon_score_0_100(kg_per_sqm: Optional[float]) -> float:
     """

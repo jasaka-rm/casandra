@@ -20,7 +20,7 @@ with st.sidebar:
     cik = st.text_input("CIK (no leading zeros required)", value="0000790703")
     name = st.text_input("REIT Name", value="Simon Property Group")
     ticker = st.text_input("Ticker", value="SPG")
-    max_props = st.slider("Max properties to parse", 3, 40, 10, 1)
+    # max_props = st.slider("Max properties to parse", 3, 40, 10, 1)
 
     st.markdown("---")
     st.subheader("Weights (sum to 100%)")
@@ -33,10 +33,10 @@ with st.sidebar:
     else:
         st.caption(f"Current total: **{total_w}%**")
 
-    st.markdown("---")
-    st.subheader("Carbon CSV upload")
-    st.caption("CSV with columns: `ticker, scope12_tonnes_co2e, gross_leasable_area_sqm`")
-    carbon_file = st.file_uploader("Upload carbon_inputs.csv", type=["csv"])
+    # st.markdown("---")
+    # st.subheader("Carbon CSV upload")
+    # st.caption("CSV with columns: `ticker, scope12_tonnes_co2e, gross_leasable_area_sqm`")
+    # carbon_file = st.file_uploader("Upload carbon_inputs.csv", type=["csv"])
 
     st.markdown("---")
     st.subheader("SEC User-Agent")
@@ -46,13 +46,13 @@ with st.sidebar:
     run_btn = st.button("▶️ Run scoring")
 
 # Save uploaded CSV to a temp file if provided
-temp_csv_path = None
-if carbon_file is not None:
-    temp_csv_path = Path(st.experimental_user_input_stream() if hasattr(st, "experimental_user_input_stream") else ".") / "uploaded_carbon_inputs.csv"
-    # Write to disk
-    data = carbon_file.read()
-    with open(temp_csv_path, "wb") as f:
-        f.write(data)
+# temp_csv_path = None
+# if carbon_file is not None:
+#     temp_csv_path = Path(st.experimental_user_input_stream() if hasattr(st, "experimental_user_input_stream") else ".") / "uploaded_carbon_inputs.csv"
+#     # Write to disk
+#     data = carbon_file.read()
+#     with open(temp_csv_path, "wb") as f:
+#         f.write(data)
 
 # Normalize weights to 0..1
 def normalize_weights(a, b, c):
@@ -70,11 +70,9 @@ if run_btn:
         try:
             # Call pipeline
             res = score_reit(
-                cik=cik,
-                name=name,
-                ticker=ticker,
-                carbon_csv=str(temp_csv_path) if temp_csv_path else "carbon_inputs.csv",
-                max_props=max_props
+                cik=cik.strip(),
+                name=name.strip(),
+                ticker=ticker.strip()
             )
 
             # Recombine with custom weights (if your pipeline always uses config weights,
