@@ -1,6 +1,7 @@
 """
 Orchestrates the whole flow for a single REIT:
-EDGAR → properties → geocode → climate → carbon → governance (1y/5y/10y) → final scores. Returns a dict with all component and final scores.
+EDGAR → properties → geocode → climate → carbon → governance (1y/5y/10y) → final scores. 
+Returns a dict with all component and final scores.
 
 End-to-end demo for a single REIT:
 - Pull 10-K
@@ -21,16 +22,6 @@ from .carbon_intensity import carbon_intensity_from_csv, carbon_score_0_100
 from .governance_sentiment import governance_risk_score_0_100
 from .config import SEC_USER_AGENT, WINDOWS
 from .scoring import combine_scores
-
-from casandra.edgar_scraper import download_10k_text
-from casandra.property_parser import extract_item2_block, parse_property_addresses
-from casandra.geocode import geocode_address
-from casandra.climate_risk import climate_risk_0_100
-from casandra.carbon_intensity import carbon_intensity_from_csv, carbon_score_0_100
-from casandra.governance_sentiment import governance_risk_score_0_100
-from casandra.config import SEC_USER_AGENT, WINDOWS
-from casandra.scoring import combine_scores
-
 
 def score_reit(cik: str, name: str, ticker: str, carbon_csv: str, max_props: int = 10):
     # 1) filings -> addresses

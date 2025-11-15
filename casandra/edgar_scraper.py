@@ -38,3 +38,26 @@ def download_10k_text(cik_nozeros: str) -> str:
     r.raise_for_status()
     # Some filings are HTML; return raw text for downstream parsing
     return r.text
+
+
+if __name__ == "__main__":
+    # Example: test a few public companies
+    test_ciks = {
+        "AAPL": "320193",     # Apple Inc.
+        "MSFT": "789019",     # Microsoft
+        "TSLA": "1318605",    # Tesla
+    }
+
+    for name, cik in test_ciks.items():
+        print(f"\n=== {name} ({cik}) ===")
+        try:
+            url = latest_10k_primary_doc_url(cik)
+            print(f"10-K URL: {url}")
+
+            text = download_10k_text(cik)
+            print(f"Retrieved {len(text):,} characters of text.")
+
+            # Optional: preview a few lines
+            print(text[:500])
+        except Exception as e:
+            print(f"Error for {name}: {e}")

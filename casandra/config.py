@@ -1,5 +1,9 @@
 '''
-Central settings: SEC user-agent string, timeouts/rate limits, factor weights (default 33/33/33), and lookback windows (1y/5y/10y) for governance.
+Central settings: 
+- SEC user-agent string
+- timeouts/rate limits
+- factor weights (default 33/33/33)
+- lookback windows (1y/5y/10y)
 '''
 
 # Fill these in before running

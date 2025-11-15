@@ -1,5 +1,6 @@
 '''
-Turns each address into lat/lon using OpenStreetMap Nominatim (polite rate limiting). Output: {"lat": …, "lon": …, "display_name": …} for each address.
+Turns each address into lat/lon using OpenStreetMap Nominatim (polite rate limiting). 
+Output: {"lat": …, "lon": …, "display_name": …} for each address.
 '''
 
 import time, requests

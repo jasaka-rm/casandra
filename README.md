@@ -48,7 +48,7 @@ pip install -r requirements.txt
 
 ## 🧩 Usage Example
 ```bash
-from reitvision_esg.demo_pipeline import score_reit
+from casandra.demo_pipeline import score_reit
 
 result = score_reit(
     cik="0000790703",           # Example: Simon Property Group
@@ -76,7 +76,7 @@ Example output
 ```
 
 ## 🎛️ Interactive Dashboard (Streamlit)
-We’ve built a simple Streamlit app (app.py) to visualize and interact with the Casandra model.
+We have built a simple Streamlit app (app.py) to visualize and interact with the Casandra model.
 It lets you enter a REIT name, ticker, and CIK number, then runs the full ESG-scoring pipeline and displays results instantly in a web dashboard.
 
 🧭 How to launch it
@@ -99,6 +99,11 @@ See ESG metrics for 1-, 5-, and 10-year horizons
 JSON summary + individual metrics displayed in real time
 Works entirely with Python — no extra setup needed
 
+## 📸 App Preview
+
+Below is an example of Casandra application in action.
+
+![App Screenshot](static/cap.png)
 
 
 ## 🧮 Project Structure
@@ -114,17 +119,17 @@ casandra/
 ├── geocode.py                # Convert property addresses to lat/lon
 ├── governance_sentiment.py   # Analyze governance sentiment via NLP (VADER)
 ├── property_parser.py        # Extract property addresses from 10-K HTML
-├── scoring.py                # Combine all factors into ESG-adjusted score
-└── app.py                    # Streamlit dashboard for interactive visualization
+└──  scoring.py                # Combine all factors into ESG-adjusted score
 
 # Root-level files
+app.py                        # Streamlit dashboard for interactive visualization
 carbon_inputs.csv             # Sample REIT carbon data
-uploaded_carbon_inputs.csv    # Optional user-uploaded version
 run_demo.py                   # Script to run the ESG scoring pipeline manually
 requirements.txt              # Python dependencies
 README.md                     # Project documentation
 .venv/                        # Virtual environment (ignored in Git)
 .vscode/                      # Editor configuration
+static/                       # Media storage
 ```
 
 

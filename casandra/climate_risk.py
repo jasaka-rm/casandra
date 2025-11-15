@@ -4,8 +4,7 @@ MVP climate proxies (0–100, higher = worse):
 - Flood risk via Open-Elevation (low elevation ⇒ higher risk).
 Combines sub-risks into a single climate risk score.
 
-
-MVP: Use simple, transparent proxies you can actually run now.
+Proxies:
 - Heat risk proxy: projected change in hottest-day temperature via Open-Meteo CMIP6 API
 - Flood proxy: low elevation heuristic using Open-Elevation; coastal proximity via reverse geocoding country + known coastline flag (very rough)
 - Wildfire proxy: use recent burned area climatology proxy (skip for MVP or set neutral)
@@ -25,7 +24,7 @@ def heat_risk_score(lat: float, lon: float) -> float:
         "latitude": lat,
         "longitude": lon,
         "start_year": 2031, "end_year": 2060,  # mid-term window
-        "month": 7,  # hottest month in many N. Hemisphere locations; keep simple
+        "month": 7,  # hottest month in many N. Hemisphere locations;
         "models": "MPI-ESM1-2-LR",
         "daily": "temperature_2m_max",
     }

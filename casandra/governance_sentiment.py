@@ -1,8 +1,6 @@
 """
-Fetches Google News RSS headlines for the REIT name (within a lookback window), runs VADER sentiment, and converts to a governance/controversy risk score (0–100).
-
-MVP: Pull Google News RSS for the REIT name and compute VADER sentiment.
-Score => invert to "governance/controversy risk" (more negative = higher risk).
+Fetches Google News RSS headlines for the REIT name (within a lookback window) 
+Runs VADER sentiment, and converts to a governance/controversy risk score (0–100).
 """
 
 import time, feedparser

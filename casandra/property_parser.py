@@ -1,8 +1,7 @@
 '''
-Pulls the “Item 2. Properties” section from the 10-K and heuristically extracts location lines (tables/bullets). 
+Pulls the “Item 2. Properties” section from the 10-K and extracts location lines (tables/bullets). 
 Output: a deduplicated list like [{ "address": "City, ST | …" }, …].
 '''
-
 
 import re
 from bs4 import BeautifulSoup
