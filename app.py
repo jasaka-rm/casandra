@@ -17,9 +17,9 @@ st.caption("MVP interface to score REITs using climate, carbon, and governance f
 
 with st.sidebar:
     st.header("Inputs")
-    cik = st.text_input("CIK (no leading zeros required)", value="0000790703")
-    name = st.text_input("REIT Name", value="Simon Property Group")
-    ticker = st.text_input("Ticker", value="SPG")
+    cik = st.text_input("CIK (no leading zeros required)", value="0000899689")
+    name = st.text_input("REIT Name", value="Vornado Realty Trust")
+    ticker = st.text_input("Ticker", value="VRT")
     # max_props = st.slider("Max properties to parse", 3, 40, 10, 1)
 
     st.markdown("---")
