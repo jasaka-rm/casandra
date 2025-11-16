@@ -45,6 +45,12 @@ pip install -r requirements.txt
 
 ---
 
+## 📸 App Preview
+
+Below is an example of Casandra application in action.
+
+![App Screenshot](static/cap_dashboard.png)
+
 
 ## 🧩 Usage Example
 ```bash
@@ -98,18 +104,6 @@ streamlit run app.py
 Open your browser at: 
 http://localhost:8501
 
-🧩 Features
-Input REIT CIK, name, ticker, and optional CSV path
-See ESG metrics for 1-, 5-, and 10-year horizons
-Calculate stock-price changes based on the ESG horizons 
-JSON summary + individual metrics displayed in real time
-Works entirely with Python — no extra setup needed
-
-## 📸 App Preview
-
-Below is an example of Casandra application in action.
-
-![App Screenshot](static/cap_dashboard.png)
 
 
 ## 🧮 Project Structure
@@ -140,7 +134,7 @@ static/                       # Media storage
 ```
 
 
-## Future Work
+## 🔜 Future Work
 
 - Integrate scenario-based climate projections for more dynamic risk modeling.
 - Implement rolling news windows to capture evolving governance sentiment.
