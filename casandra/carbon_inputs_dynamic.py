@@ -1,7 +1,7 @@
 # carbon_inputs_dynamic.py
 from typing import Dict, Optional
 from .edgar_scraper import download_10k_text 
-from .property_parser import extract_item2_block  
+from .property_parser import extract_item2_tables_html 
 from .config import SEC_USER_AGENT
 import re, math, pandas as pd
 

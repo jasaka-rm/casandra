@@ -21,7 +21,7 @@ import pandas as pd
 
 from .config import SEC_USER_AGENT
 from .edgar_scraper import download_10k_text
-from .property_parser import extract_item2_block, parse_property_addresses
+from .property_parser import extract_item2_tables_html, parse_property_addresses
 from .geocode import geocode_address
 from .climate_risk import climate_risk_0_100
 from .carbon_inputs_dynamic import get_carbon_row
@@ -42,7 +42,7 @@ def score_reit(
     filing_text = download_10k_text(cik)
     print("Downloaded 10-K length:", len(filing_text or ""))
     print("First 300 chars:", (filing_text or "")[:300])
-    item2_text = extract_item2_block(filing_text)
+    item2_text = extract_item2_tables_html(filing_text)
     props = parse_property_addresses(item2_text)
 
     # 2) geocode & climate scores

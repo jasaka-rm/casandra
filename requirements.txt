@@ -6,3 +6,4 @@ feedparser
 nltk
 scikit-learn
 streamlit
+yfinance
