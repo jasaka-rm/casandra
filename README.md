@@ -24,7 +24,7 @@ Traditional REIT analysis misses emerging ESG risks — such as carbon penalties
 4. **Analyzes governance sentiment** using NLP (VADER on Google News)  
 5. Combines all three into an **ESG-Adjusted Distress Score (0-100)**  
 6. Calculates predictive metrics for **1-, 5-, and 10-year** horizons  
-7. (Optional) Links ESG metrics to future **price-drop probability** (>20 % in 12 months)
+7. Links ESG metrics to future **price-drop probability** (>20 % in 12 months)
 
 ---
 
@@ -69,7 +69,14 @@ Example output
   'final_esg_1y': 48.9,
   'final_esg_5y': 47.4,
   'final_esg_10y': 46.7,
-  'n_properties_used': 8
+  'n_properties_used': 8,
+  "current_price": 170.97,
+  "adj_pct_1y": -0.16,
+  "price_1y": 170.69,
+  "adj_pct_5y": -0.56%,
+  "price_5y": 170.02,
+  "adj_pct_10y": -0.35%,
+  "price_10y": 170.38,
 }
 ```
 
@@ -94,6 +101,7 @@ http://localhost:8501
 🧩 Features
 Input REIT CIK, name, ticker, and optional CSV path
 See ESG metrics for 1-, 5-, and 10-year horizons
+Calculate stock-price changes based on the ESG horizons 
 JSON summary + individual metrics displayed in real time
 Works entirely with Python — no extra setup needed
 
@@ -101,7 +109,7 @@ Works entirely with Python — no extra setup needed
 
 Below is an example of Casandra application in action.
 
-![App Screenshot](static/cap.png)
+![App Screenshot](static/cap_dashboard.png)
 
 
 ## 🧮 Project Structure
@@ -116,8 +124,9 @@ casandra/
 ├── edgar_scraper.py          # Scrape SEC EDGAR filings (10-K Item 2)
 ├── geocode.py                # Convert property addresses to lat/lon
 ├── governance_sentiment.py   # Analyze governance sentiment via NLP (VADER)
+├── price_projection.py        # Calculate the stock-price change
 ├── property_parser.py        # Extract property addresses from 10-K HTML
-└──  scoring.py                # Combine all factors into ESG-adjusted score
+└── scoring.py                # Combine all factors into ESG-adjusted score
 
 # Root-level files
 app.py                        # Streamlit dashboard for interactive visualization
@@ -132,3 +141,10 @@ static/                       # Media storage
 
 
 ## Future Work
+
+- Integrate scenario-based climate projections for more dynamic risk modeling.
+- Implement rolling news windows to capture evolving governance sentiment.
+- Scrape REIT data directly from institutional investor websites for higher accuracy.
+- Calibrate carbon intensity by sector and include glide-path adjustments for planned retrofits.
+- Recalculation of the score based on personalised data to guide improvements in the score.
+- Normalization of the different dimensions by building type and size.
