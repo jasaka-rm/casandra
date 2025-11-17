@@ -51,21 +51,6 @@ Below is an example of Casandra application in action.
 
 ![App Screenshot](static/cap_dashboard.png)
 
-
-## 🧩 Usage Example
-```bash
-from casandra.demo_pipeline import score_reit
-
-result = score_reit(
-    cik="0000899689",
-    name="Vornado Realty Trust",
-    ticker="VRT"
-)
-
-print(result)
-```
-
-
 Example output
 ```bash
 {
