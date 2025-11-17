@@ -14,17 +14,17 @@ MVP: read a CSV you curate with columns:
 import math, pandas as pd
 from typing import Optional, Union
 
-# def carbon_intensity_from_csv(csv_path: str, ticker: str) -> Optional[float]:
-#     df = pd.read_csv(csv_path)
-#     row = df[df["ticker"].str.upper() == ticker.upper()].head(1)
-#     if row.empty:
-#         return None
-#     t = float(row.iloc[0]["scope12_tonnes_co2e"])
-#     a = float(row.iloc[0]["gross_leasable_area_sqm"])
-#     if a <= 0:
-#         return None
-#     kg_per_sqm = (t * 1000) / a
-#     return kg_per_sqm
+def carbon_intensity_from_csv(csv_path: str, ticker: str) -> Optional[float]:
+    df = pd.read_csv(csv_path)
+    row = df[df["ticker"].str.upper() == ticker.upper()].head(1)
+    if row.empty:
+        return None
+    t = float(row.iloc[0]["scope12_tonnes_co2e"])
+    a = float(row.iloc[0]["gross_leasable_area_sqm"])
+    if a <= 0:
+        return None
+    kg_per_sqm = (t * 1000) / a
+    return kg_per_sqm
 
 def _load_carbon_df(carbon: Union[str, "pd.DataFrame"]) -> pd.DataFrame:
     if isinstance(carbon, pd.DataFrame):

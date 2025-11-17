@@ -53,7 +53,7 @@ def _linear_adjustment(score: float, beta: float) -> float:
     """
     # Clamp score to [0,100] just in case
     s = max(0.0, min(100.0, float(score)))
-    return beta * (s - 50.0) / 50.0 # Transform the score into a number bw -1 and 1 times the beta of each scenario
+    return beta * (50.0 - s) / 50.0 # Transform the score into a number bw -1 and 1 times the beta of each scenario
 
 # Returns a class object with all the prices and adjustments
 def project_prices_from_scores(
@@ -97,7 +97,6 @@ def run_price_projection(
     cik: str,
     name: str,
     carbon_csv: Optional[str] = None,
-    max_props: int = 10,
     beta_1y: float = 0.10,
     beta_5y: float = 0.20,
     beta_10y: float = 0.30,

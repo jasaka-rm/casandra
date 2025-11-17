@@ -11,6 +11,8 @@ st.set_page_config(page_title="CASANDRA", page_icon="🏙️", layout="wide")
 st.title("🏙️ CASANDRA — Dashboard")
 st.caption("MVP interface to score REITs using climate, carbon, and governance factors.")
 
+carbon_csv = "carbon_inputs.csv"
+
 # Show instructions only if the scoring button hasn't been pressed yet
 if "scoring_done" not in st.session_state or not st.session_state.scoring_done:
     st.badge(
@@ -61,7 +63,8 @@ if run_btn:
             res = score_reit(
                 cik=cik.strip(),
                 name=name.strip(),
-                ticker=ticker.strip()
+                ticker=ticker.strip(),
+                carbon_csv=carbon_csv
             )
 
             # Mark scoring as done (hides sidebar message)

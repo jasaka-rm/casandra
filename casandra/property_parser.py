@@ -3,10 +3,14 @@ Pulls the “Item 2. Properties” section from the 10-K and extracts location l
 Output: a deduplicated list like [{ "address": "City, ST | …" }, …].
 '''
 
-# casandra/property_parser.py
+
 
 import re
 from bs4 import BeautifulSoup
+import pandas as pd
+from casandra.edgar_scraper import download_10k_text
+# from casandra.property_parser import extract_item2_tables_html
+
 
 # --- dynamic parser ---
 def _make_soup(html: str) -> BeautifulSoup:
@@ -70,59 +74,80 @@ def extract_item2_tables_html(html: str) -> str | None:
 def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", (s or "").replace("\u00A0", " ")).strip()
 
-def parse_property_addresses(item2_or_full_html: str, full_html_if_needed: str | None = None) -> list[dict]:
+def _find_col(colnames, *candidates):
+    """Return the first column name that fuzzy-matches any candidate."""
+    low = {str(c).strip().lower(): c for c in colnames}
+    for c in colnames:
+        lc = str(c).strip().lower()
+        for cand in candidates:
+            if cand in lc:
+                return low[lc]
+    return None
+
+def parse_property_addresses(item2_html: str, full_html_if_needed: str | None = None) -> list[dict]:
     """
-    Try to parse addresses from the Item 2 tables. If no tables are found,
-    fall back to scanning the entire document for tables that look like the
-    properties listing.
+    Parse addresses from Item 2 tables using pandas.read_html, which handles
+    colspans/rowspans/spacer cells better than manual HTML walking.
+    We look for a table containing both a 'Property'/'Properties' column and a 'Location' column.
+    Returns [{'address': 'Property Name, Location'}, ...]
     """
-    out = []
+    def parse_html_with_pandas(html_fragment: str) -> list[dict]:
+        out = []
+        try:
+            dfs = pd.read_html(html_fragment, flavor="lxml")
+        except ValueError:
+            return out  # no tables
+        for df in dfs:
+            # flatten MultiIndex columns if present
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = [" ".join([_norm(str(x)) for x in tup if x is not None]).strip() for tup in df.columns.values]
+            else:
+                df.columns = [_norm(str(c)) for c in df.columns]
 
-    def parse_tables_from_html(html_fragment: str) -> list[dict]:
-        local = []
-        soup = _make_soup(html_fragment)
-        tables = soup.find_all("table")
-        if not tables:
-            return local
+            # find key columns (case-insensitive, fuzzy)
+            prop_col = _find_col(df.columns, "property", "properties")
+            loc_col  = _find_col(df.columns, "location")
 
-        current_region = None
-
-        for table in tables:
-            rows = table.find_all("tr")
-            if not rows:
+            if not prop_col or not loc_col:
                 continue
 
-            # Detect a properties table (header contains "Property" and either "% Ownership" or "Type")
-            header_cells = [_norm(x.get_text()) for x in rows[0].find_all(["th", "td"])]
-            header_text = " ".join(h.lower() for h in header_cells)
-            looks_like_props = ("property" in header_text) and (("% ownership" in header_text) or ("type" in header_text))
-            if not looks_like_props:
-                continue
+            # clean rows (drop all-empty)
+            df = df[[prop_col, loc_col]].copy()
+            df[prop_col] = df[prop_col].astype(str).map(_norm)
+            df[loc_col]  = df[loc_col].astype(str).map(_norm)
 
-            for tr in rows[1:]:
-                cells = [_norm(td.get_text()) for td in tr.find_all(["td", "th"])]
-                if not cells:
-                    continue
-                # Region header like "NEW YORK:"
-                if len(cells) == 1 and cells[0].endswith(":") and cells[0].upper() == cells[0]:
-                    current_region = cells[0].rstrip(":").title()
-                    continue
-                # Skip empty/header rows
-                if not cells[0] or "property" in cells[0].lower():
-                    continue
+            # drop banner/section rows (e.g., 'Residential Communities', 'Office Building')
+            banners = set(["residential communities", "office building", "office buildings", "retail", "industrial"])
+            mask_banner = df[loc_col].str.len().eq(0) & df[prop_col].str.lower().isin(banners)
 
-                prop_name = cells[0]
-                addr = f"{prop_name}, {current_region}" if current_region else prop_name
-                local.append({"address": addr})
-        return local
+            # keep rows with both fields non-empty
+            mask_valid = df[prop_col].ne("").astype(bool) & df[loc_col].ne("").astype(bool) & (~mask_banner)
+            for _, row in df[mask_valid].iterrows():
+                out.append({"address": f"{row[prop_col]}, {row[loc_col]}"})
+        return out
 
-    # First: attempt parsing only the Item 2 tables we extracted
-    if item2_or_full_html:
-        out = parse_tables_from_html(item2_or_full_html)
+    props = parse_html_with_pandas(item2_html or "")
+    if not props and full_html_if_needed:
+        props = parse_html_with_pandas(full_html_if_needed)
+    return props
 
-    # Fallback: if nothing parsed and we were given full HTML, scan *all* tables
-    if not out and full_html_if_needed:
-        out = parse_tables_from_html(full_html_if_needed)
 
-    return out
+def extract_addresses_from_table0_col0(cik: str) -> pd.DataFrame:
+    """
+    Download the latest 10-K for a CIK, parse Item 2 tables,
+    and extract property addresses from Table 0, column 0.
+    Returns a DataFrame with a single 'address' column.
+    """
+    html = download_10k_text(cik)
+    blk  = extract_item2_tables_html(html)
+    dfs  = pd.read_html(blk, flavor="lxml")
+    df0  = dfs[0]  # Table 0 is the properties table
 
+    s = df0.iloc[:, 0].astype(str).str.strip()
+    s = s[s.ne("")]
+    s = s[~s.str.fullmatch(r"(?i)property|properties")]
+    s = s[~s.str.contains(r"(?i)\bSEGMENT\b")]
+    s = s.str.replace(r"\(\d+\)", "", regex=True).str.replace(r"\s{2,}", " ", regex=True).str.strip()
+
+    addresses = list(dict.fromkeys(s.tolist()))
+    return pd.DataFrame({"address": addresses})
